@@ -63,6 +63,11 @@ console.log(thokit.pojAscii2Unicode('SANN te2 khoo3 khuah; lang5 lau6 phinn7 tit
 ``` python
 python test/py/oj.py
 ```
+
+### HTML
+
+試用 `test/html/demo.html`（着注意 `thokit.js` 个導入），或者「韻彙」網站搭个[頁面](https://unlui.enatsu.top/tool/thokit)。
+
 ### Node.js
 
 ``` bash

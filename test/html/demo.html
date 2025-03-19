@@ -17,6 +17,12 @@
 			font-family: 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 		}
 
+		.thokit-row-container {
+			margin: 0px auto;
+			padding-left: 0;
+			padding-right: 0;
+		}
+
 		a,
 		input,
 		button {
@@ -33,8 +39,7 @@
 			margin: 10px;
 		}
 
-		.btn-success,
-		.btn-danger {
+		.thokit-btn {
 			width: 100%;
 		}
 
@@ -49,56 +54,54 @@
 <body>
 	<div class="container">
 		<div class="main">
-			<h3 class="mb-4">桃橘 - THOKIT | 羅馬字轉換</h3>
-			<div class="row mb-2">
-				<div class="col-12 col-lg-10 row">
+			<h3 class="mb-4 col-12">桃橘 - THOKIT | 羅馬字轉換</h3>
+			<div class="mb-4">
+				<div class="col-12 row thokit-row-container">
 					<div class="col-12 col-md-6 mt-2">
-						源文本格式
 						<select id="source-format" class="form-control">
-							<option value="tailoAscii">臺羅數字調</option>
-							<option value="pojAscii">白話字數字調</option>
-							<option value="tailoUnicode">臺羅閏符調</option>
-							<option value="pojUnicode">白話字閏符調</option>
+							<option value="tailoAscii">臺羅數字式</option>
+							<option value="pojAscii">白話字數字式</option>
+							<option value="tailoUnicode">臺羅閏符式</option>
+							<option value="pojUnicode">白話字閏符式</option>
 						</select>
+						<textarea name="source" id="source" class="form-control text col-12" rows="6"
+							placeholder="請輸入文本"></textarea>
 					</div>
 					<div class="col-12 col-md-6 mt-2">
-						目標文本格式
 						<select id="target-format" class="form-control">
 							<!-- 目標選項將根據源文本格式動態更新 -->
 						</select>
+						<textarea name="target" id="target" class="form-control text col-12" rows="6"
+							placeholder="轉換結果解顯示佇遮"></textarea>
 					</div>
-				</div>
-				<div class="col-12 col-lg-10 row">
-					<div class="col-12 col-md-6 mt-2" id="poj-standard-div">
-						白話字標調規則
-						<select id="poj-standard" class="form-control">
-							<option value="default">默認</option>
-							<option value="campbell">甘爲霖</option>
-						</select>
+					<div class="col-12 row thokit-row-container">
+						<div class="col-12 col-md-6 mt-2" id="poj-standard-div">
+							白話字拼寫佮標調規則
+							<select id="poj-standard" class="form-control">
+								<option value="default">默認</option>
+								<option value="campbell">甘爲霖</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-4 col-md-2 mt-2">
+						<button id="copy" class="btn btn-success thokit-btn">複製</button>
+					</div>
+					<div class="col-4 col-md-2 mt-2">
+						<button id="clean" class="btn btn-danger thokit-btn">清除</button>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-4 col-md-2 mt-2">
-					<button id="copy" class="btn btn-success">複製輸出</button>
-				</div>
-				<div class="col-4 col-md-2 mt-2">
-					<button id="clean" class="btn btn-danger">清除</button>
-				</div>
-			</div>
-			<h5 id="input-head-hint">輸入</h5>
-			<textarea name="source" id="source" class="form-control text" cols="80" rows="6" placeholder="請輸入文本"></textarea>
-			<hr>
-			<h5 id="output-head-hint">輸出</h5>
-			<textarea name="target" id="target" class="form-control text" cols="80" rows="6" placeholder="轉換結果解顯示佇遮"></textarea>
-			<hr>
-			<div class="footer l" style="color:gray; text-align: center;">
-					Copyleft 2021-2025. Tong-uán Lab.
+			<div class="text-left mt-4 mb-4 col-12">
+				<h4 class="col-12">
+					<h3>說明</h3>
+					<p>「<b>桃橘</b>」（<b>THOKIT，Tong-uán Hokkien Orthography toolKIT</b>）是東苑實驗室个閩南方言拼寫方案處理工具套件，漢字號名取漳州話
+						Thô-kit，毋過若讀做泉廈腔 Thô-kiat 嘛解使着。目前支持 Python 佮 JavaScript。</p>
+					<a href="https://github.com/TongUanLab/thokit">GitHub</p>
 			</div>
 		</div>
 	</div>
 	<script type="module">
-		import { ThoKit } from '../../thokit.js';
+		import { ThoKit } from '../..//thokit.js';
 		const thokit = new ThoKit();
 		thokit.greet();
 
@@ -114,7 +117,7 @@
 			"tailoUnicode2PojUnicode": thokit.tailoUnicode2PojUnicode.bind(thokit)
 		};
 
-		// 定義源格式與目標格式的對應關係
+		// 定義源格式佮目標格式个對應關係
 		const formatMapping = {
 			tailoAscii: ["tailoUnicode", "pojAscii"],
 			pojAscii: ["pojUnicode", "tailoAscii"],
@@ -122,12 +125,12 @@
 			pojUnicode: ["pojAscii", "tailoUnicode"]
 		};
 
-		// 定義格式的名稱映射
+		// 定義格式个名稱映射
 		const formatNames = {
-			tailoAscii: "臺羅數字調",
-			pojAscii: "白話字數字調",
-			tailoUnicode: "臺羅閏符調",
-			pojUnicode: "白話字閏符調"
+			tailoAscii: "臺羅數字調式",
+			pojAscii: "白話字數字調式",
+			tailoUnicode: "臺羅閏符調式",
+			pojUnicode: "白話字閏符調式"
 		};
 
 		let sourceFormat = "tailoAscii";
@@ -135,14 +138,14 @@
 		let pojStandard = "default";
 
 		function combineFuncKey(sourceFormat, targetFormat) {
-			if (sourceFormat.includes('tailo') & targetFormat.includes('tailo')){
-				return `${sourceFormat}2${targetFormat.charAt(5).toUpperCase()+targetFormat.slice(6)}`;
+			if (sourceFormat.includes('tailo') & targetFormat.includes('tailo')) {
+				return `${sourceFormat}2${targetFormat.charAt(5).toUpperCase() + targetFormat.slice(6)}`;
 			}
 			else if (sourceFormat.includes('poj') & targetFormat.includes('poj')) {
-				return `${sourceFormat}2${targetFormat.charAt(3).toUpperCase()+targetFormat.slice(4)}`;
+				return `${sourceFormat}2${targetFormat.charAt(3).toUpperCase() + targetFormat.slice(4)}`;
 			}
 			else {
-				return `${sourceFormat}2${targetFormat.charAt(0).toUpperCase()+targetFormat.slice(1)}`;
+				return `${sourceFormat}2${targetFormat.charAt(0).toUpperCase() + targetFormat.slice(1)}`;
 			}
 		}
 
@@ -197,14 +200,14 @@
 			if (textToCopy) {
 				navigator.clipboard.writeText(textToCopy)
 					.then(() => {
-						alert('文本已成功複製！');
+						alert('轉換後个文本已成功複製！');
 					})
 					.catch((err) => {
 						console.error('複製失敗:', err);
 						alert('複製失敗，請手動複製文本。');
 					});
 			} else {
-				alert('沒有內容可複製！');
+				alert('無內容通複製！');
 			}
 		});
 
