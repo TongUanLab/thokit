@@ -48,7 +48,7 @@ npm install
 npm run build
 ```
 
-``` nodejs
+``` js
 const { ThoKit } = require('./dist/thokit.cjs');
 const thokit = new ThoKit();
 
@@ -57,6 +57,13 @@ console.log(thokit.pojAscii2Unicode('SANN te2 khoo3 khuah; lang5 lau6 phinn7 tit
 ```
 
 ## 測試
+
+### Python
+
+``` python
+python test/py/oj.py
+```
+### Node.js
 
 ``` bash
 node test/node/oj.js
