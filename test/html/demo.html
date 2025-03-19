@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>桃橘 - THOKIT | 羅馬字轉換</title>
+	<meta name="keywords" content="桃橘, 羅馬字轉換器, 臺羅, 白話字, THOKIT, Tailo, POJ" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
+	<link href="https://unlui.enatsu.top/static/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://unlui.enatsu.top/static/js/jquery.min.js"></script>
+	<script src="https://unlui.enatsu.top/static/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		body {
+			padding-top: 35px;
+			padding-bottom: 35px;
+			background-color: #f5f5f5;
+			font-family: 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+		}
+
+		a,
+		input,
+		button {
+			outline: none !important;
+		}
+
+		.text {
+			width: 100%;
+			height: 150px;
+			resize: vertical;
+		}
+
+		.form-group {
+			margin: 10px;
+		}
+
+		.btn-success,
+		.btn-danger {
+			width: 100%;
+		}
+
+		#output-head-hint,
+		#input-head-hint {
+			margin-top: 20px;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="main">
+			<h3 class="mb-4">桃橘 - THOKIT | 羅馬字轉換</h3>
+			<div class="row mb-2">
+				<div class="col-12 col-lg-10 row">
+					<div class="col-12 col-md-6 mt-2">
+						源文本格式
+						<select id="source-format" class="form-control">
+							<option value="tailoAscii">臺羅數字調</option>
+							<option value="pojAscii">白話字數字調</option>
+							<option value="tailoUnicode">臺羅閏符調</option>
+							<option value="pojUnicode">白話字閏符調</option>
+						</select>
+					</div>
+					<div class="col-12 col-md-6 mt-2">
+						目標文本格式
+						<select id="target-format" class="form-control">
+							<!-- 目標選項將根據源文本格式動態更新 -->
+						</select>
+					</div>
+				</div>
+				<div class="col-12 col-lg-10 row">
+					<div class="col-12 col-md-6 mt-2" id="poj-standard-div">
+						白話字標調規則
+						<select id="poj-standard" class="form-control">
+							<option value="default">默認</option>
+							<option value="campbell">甘爲霖</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-4 col-md-2 mt-2">
+					<button id="copy" class="btn btn-success">複製輸出</button>
+				</div>
+				<div class="col-4 col-md-2 mt-2">
+					<button id="clean" class="btn btn-danger">清除</button>
+				</div>
+			</div>
+			<h5 id="input-head-hint">輸入</h5>
+			<textarea name="source" id="source" class="form-control text" cols="80" rows="6" placeholder="請輸入文本"></textarea>
+			<hr>
+			<h5 id="output-head-hint">輸出</h5>
+			<textarea name="target" id="target" class="form-control text" cols="80" rows="6" placeholder="轉換結果解顯示佇遮"></textarea>
+			<hr>
+			<div class="footer l" style="color:gray; text-align: center;">
+					Copyleft 2021-2025. Tong-uán Lab.
+			</div>
+		</div>
+	</div>
+	<script type="module">
+		import { ThoKit } from '../../thokit.js';
+		const thokit = new ThoKit();
+		thokit.greet();
+
+		// 定義轉換函數
+		const stateFunctions = {
+			"tailoAscii2Unicode": thokit.tailoAscii2Unicode.bind(thokit),
+			"pojAscii2Unicode": thokit.pojAscii2Unicode.bind(thokit),
+			"tailoUnicode2Ascii": thokit.tailoUnicode2Ascii.bind(thokit),
+			"pojUnicode2Ascii": thokit.pojUnicode2Ascii.bind(thokit),
+			"pojAscii2TailoAscii": thokit.pojAscii2TailoAscii.bind(thokit),
+			"tailoAscii2PojAscii": thokit.tailoAscii2PojAscii.bind(thokit),
+			"pojUnicode2TailoUnicode": thokit.pojUnicode2TailoUnicode.bind(thokit),
+			"tailoUnicode2PojUnicode": thokit.tailoUnicode2PojUnicode.bind(thokit)
+		};
+
+		// 定義源格式與目標格式的對應關係
+		const formatMapping = {
+			tailoAscii: ["tailoUnicode", "pojAscii"],
+			pojAscii: ["pojUnicode", "tailoAscii"],
+			tailoUnicode: ["tailoAscii", "pojUnicode"],
+			pojUnicode: ["pojAscii", "tailoUnicode"]
+		};
+
+		// 定義格式的名稱映射
+		const formatNames = {
+			tailoAscii: "臺羅數字調",
+			pojAscii: "白話字數字調",
+			tailoUnicode: "臺羅閏符調",
+			pojUnicode: "白話字閏符調"
+		};
+
+		let sourceFormat = "tailoAscii";
+		let targetFormat = "tailoUnicode";
+		let pojStandard = "default";
+
+		function combineFuncKey(sourceFormat, targetFormat) {
+			if (sourceFormat.includes('tailo') & targetFormat.includes('tailo')){
+				return `${sourceFormat}2${targetFormat.charAt(5).toUpperCase()+targetFormat.slice(6)}`;
+			}
+			else if (sourceFormat.includes('poj') & targetFormat.includes('poj')) {
+				return `${sourceFormat}2${targetFormat.charAt(3).toUpperCase()+targetFormat.slice(4)}`;
+			}
+			else {
+				return `${sourceFormat}2${targetFormat.charAt(0).toUpperCase()+targetFormat.slice(1)}`;
+			}
+		}
+
+		let funcKey = combineFuncKey(sourceFormat, targetFormat);
+
+		// 更新目標格式選項
+		function updateTargetOptions() {
+			const targetSelect = document.getElementById("target-format");
+			targetSelect.innerHTML = ""; // 清空現有選項
+			formatMapping[sourceFormat].forEach(format => {
+				const option = document.createElement("option");
+				option.value = format;
+				option.textContent = formatNames[format];
+				option.selected = false;
+				targetSelect.appendChild(option);
+			});
+			targetFormat = targetSelect.value; // 更新目標格式
+			funcKey = combineFuncKey(sourceFormat, targetFormat);
+		}
+
+		// 轉換函數
+		function convert() {
+			const src = $("#source").val();
+			let tgt = "";
+			if (src) {
+				const func = stateFunctions[funcKey];
+				if (func) {
+					if (funcKey === "pojAscii2Unicode" || funcKey === "pojUnicode2TailoUnicode" || funcKey === "tailoUnicode2PojUnicode") {
+						tgt = func(src, pojStandard !== "default" ? pojStandard : undefined);
+					} else {
+						tgt = func(src);
+					}
+				}
+				console.log("funcKey:", funcKey, "src:", src, "tgt:", tgt);
+			}
+			$("#target").val(tgt);
+		}
+
+		// 改變選項顯示行爲
+		function changeDisplay() {
+			if (funcKey == "pojAscii2Unicode" || funcKey == "pojUnicode2TailoUnicode" || funcKey == "tailoUnicode2PojUnicode") {
+				document.getElementById("poj-standard-div").style.display = "";
+			}
+			else {
+				document.getElementById("poj-standard-div").style.display = "none";
+			}
+		}
+
+		// 複製按鈕
+		$('#copy').click(function () {
+			const textToCopy = $('#target').val();
+			if (textToCopy) {
+				navigator.clipboard.writeText(textToCopy)
+					.then(() => {
+						alert('文本已成功複製！');
+					})
+					.catch((err) => {
+						console.error('複製失敗:', err);
+						alert('複製失敗，請手動複製文本。');
+					});
+			} else {
+				alert('沒有內容可複製！');
+			}
+		});
+
+		// 清除按鈕
+		$('#clean').click(function () {
+			$("#source").val("");
+			$("#target").val("");
+		});
+
+		// 監聽源格式變化
+		document.getElementById("source-format").addEventListener("change", function () {
+			sourceFormat = this.value;
+			updateTargetOptions();
+			changeDisplay();
+			funcKey = combineFuncKey(sourceFormat, targetFormat);
+			convert();
+		});
+
+		// 監聽目標格式變化
+		document.getElementById("target-format").addEventListener("change", function () {
+			targetFormat = this.value;
+			changeDisplay();
+			funcKey = combineFuncKey(sourceFormat, targetFormat);
+			convert();
+		});
+
+		// 監聽白話字標調規則變化
+		document.getElementById("poj-standard").addEventListener("change", function () {
+			pojStandard = this.value;
+			convert();
+		});
+
+		// 監聽輸入框變化
+		$("#source").keyup(convert);
+
+		// 初始化
+		updateTargetOptions();
+		changeDisplay();
+	</script>
+</body>
+
+</html>
