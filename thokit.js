@@ -58,7 +58,7 @@ class ThoKit {
 	}
 	pojSpecialLetterUnicode2Ascii(text) {
 		text = text.replace(/ⁿ/g, "nn").replace(/ᴺ/g, "NN");
-		if (text.toUpperCase() === text) {
+		if (text.toUpperCase() === text && !/^O.?\u0358$/.test(text)) {
 			text = text.replace(/\u0358/g, "O");
 		} else {
 			text = text.replace(/\u0358/g, "o");
@@ -74,7 +74,7 @@ class ThoKit {
 		 *
 		 * 請注意，即个函數着考慮一對多映射，譬論講：
 		 * `O͘ => (OO|Oo)`（全大寫 | 首字母大寫）个轉換結果不唯一。
-		 * 本函數佇所有字母攏大寫个時，默認轉換做頭一種。孤 `O͘` 或者帶聲調仍然轉換做頭一種。
+		 * 本函數佇所有字母攏大寫个時，默認轉換做頭一種。孤 `O͘` 或者帶聲調轉換做後一種。
 		 */
 		if (standard) {
 			if (!this.poj_standards.includes(standard)) {

@@ -135,7 +135,7 @@ class ThoKit:
 
     def pojSpecialLetterUnicode2Ascii(self, text: str) -> str:
         text = text.replace("ⁿ", "nn").replace("ᴺ", "NN")
-        if text.upper() == text:
+        if text.upper() == text and not re.match("^O.?\u0358$", text):
             text = text.replace("\u0358", "O")
         else:
             text = text.replace("\u0358", "o")
@@ -155,7 +155,7 @@ class ThoKit:
 
         請注意，即个函數着考慮一對多映射，譬論講：
         `O͘ => (OO|Oo)`（全大寫 | 首字母大寫）个轉換結果不唯一。
-        本函數佇所有字母攏大寫个時，默認轉換做頭一種。孤 `O͘` 或者帶聲調仍然轉換做頭一種。
+        本函數佇所有字母攏大寫个時，默認轉換做頭一種。孤 `O͘` 或者帶聲調轉換做後一種。
         """
         if standard:
             assert standard in self.poj_standards
