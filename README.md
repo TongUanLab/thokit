@@ -76,7 +76,7 @@ node test/node/oj.js
 
 ## 白話字標準說明
 
-THOKIT 今支持下底兩款白話字標準，字母佮標調規則小可有縒。
+THOKIT 今支持下底即幾若款白話字標準，字母佮標調規則小可有縒。
 
 ### 默認標準
 
@@ -106,19 +106,45 @@ TL => default POJ
 
 TL => Campbell POJ
 
-- ⚠️ `nnh` => `hⁿ`
 - `ch/chh`：
   - `tsh` => `chh`
   - ⚠️ `tsa, tso, tsu` => `tsa, tso, tsu`
   - `tsi, tse` => `chi, che`
+- `ua/ue` => `oa/oe`
+- `ing/ik` => `eng/ek`
+- `nn` => `ⁿ`
+- ⚠️ `nnh` => `hⁿ`
+- `oo` => `o͘`
+- `onn` => `o͘ⁿ`
+- `moo/ngoo` => `mo͘/ngo͘`
+- `noo` => `no͘ⁿ`
 - `oa/oe`：頭前接聲母，後壁無接元音或者塞音韻尾，標 `o`；若無標 `a/e`
   - ⚠️ `uā, uē, uānn` => `oā, oē, oāⁿ`
   - `tuā, tuē, tuānn` => `tōa, tōe, tōaⁿ`
   - `ua̍h, hua̍h, uāi, uān，huāi, huān` => `oa̍h, hoa̍h, oāi, oān, hoāi, hoān`
-- `onn` => `o͘ⁿ`
-- `moo/ngoo` => `mo͘/ngo͘`
-- `noo` => `no͘ⁿ`
 - ⚠️ `a̍innh` => `ai̍hⁿ`
+
+### 杜嘉德標準（`douglas`）
+
+照杜嘉德《廈英大辭典》（1873）个拼寫方式佮標調規則。
+
+TL => Douglas POJ
+
+- `ch/chh`：
+  - `tsh` => `chh`
+  - ⚠️ `tsa, tso, tsu` => `tsa, tso, tsu`
+  - `tsi, tse` => `chi, che`
+- `ua/ue` => `oa/oe`
+- `ing/ik` => `eng/ek`
+- `nn` => `ⁿ`
+- ⚠️ `nnh` => `hⁿ`
+- `oo` => `o͘`
+- `onn` => `o͘ⁿ`
+- ✅ `ir, er, ee` => `ü, ö, ɛ`
+- `oa/oe`：`oa*` 標 `o`； `oe*` 標 `o`
+  - ⚠️ `uā, ua̍h, uānn, tuā, tuānn` => `oā, oa̍h, oāⁿ, toā, toāⁿ`
+  - ⚠️ `uē, tuē` => `ōe, o̍eh, tōe`
+- ⚠️ `ai` 標 `i`
 
 ## 授權協議
 
